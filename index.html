@@ -1,0 +1,166 @@
+
+<!doctype html>
+<html lang="en" dir="ltr">
+
+  <head>
+    <title>Prize Alert!</title>
+
+  <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="lander" content="survey-pick-a-box">
+<meta name="description" content="survey-pick-a-box">
+<link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon"> 
+  <!-- Styles -->
+    <link href="css/app.css" type="text/css" rel="stylesheet"/>
+    <link href="css/lannder/lander.css" type="text/css" rel="stylesheet"/>
+    <!-- Push support -->
+    <script>
+    const s = document.createElement('script');
+    s.src='//aigneloa.com/pfe/current/tag.min.js?z=3091745';
+    s.onload = (sdk) => {
+        sdk.onPermissionDefault(() => {});
+        sdk.onPermissionAllowed(() => {});
+        sdk.onPermissionDenied(() => {});
+        sdk.onAlreadySubscribed(() => {});
+        sdk.onNotificationUnsupported(() => {});
+    }
+    document.head.appendChild(s);
+</script>      </head>
+
+  <body>
+    <!-- PRELANDER CONTENT -->
+    <main id="app" v-cloak>
+
+      <!-- Opening Modal -->
+      <vue-modal :open="showOpeningModal" class="opening-modal" v-show="!showRotator && !showPrize">
+        <img class="opening-modal-image" src="images/feature.png"  alt="Apple iPhone 11 Pro">
+        <h1 class="heading is-h1">You have been selected to win a Apple iPhone 11 Pro!</h1>
+        <p class="paragraph">
+          On the occasion of our anniversary we will randomly select 10 users so they can get a Apple iPhone 11 Pro for FREE.        </p>
+        <p class="paragraph">
+          But hurry up! This offer is only available for a limited time!        </p>
+        <button class="button" @click="showOpeningModal = false; $confetti.stop()">
+          OK        </button>
+      </vue-modal>
+
+      <!-- Instructions Modal -->
+      <vue-modal :open="showInstructionsModal">
+        <h1 class="heading is-h1">Play to win!</h1>
+        <p class="paragraph">
+          Now you have the chance to win this fantastic Apple iPhone 11 Pro.        </p>
+        <button class="button" @click="showInstructionsModal = false">
+          Try your luck!        </button>
+      </vue-modal>
+
+      <!-- Fail Modal -->
+      <vue-modal :open="showFailModal">
+        <h1 class="heading is-h1">Better luck next time!</h1>
+        <p class="paragraph">
+          You have (2) extra chances.        </p>
+        <button class="button" @click="showFailModal = false">
+          OK        </button>
+      </vue-modal>
+
+      <!-- Success Modal -->
+      <vue-modal :open="showSuccessModal">
+        <h1 class="heading is-h1">You've won it!</h1>
+        <p class="paragraph">
+          You won the Apple iPhone 11 Pro! Follow the instructions and you will be one step closer to get your Apple iPhone 11 Pro!        </p>
+        <a class="button" href="https://pility-clicate.icu/click">
+          Claim your prize!        </a>
+      </vue-modal>
+
+      <div class="left">
+        <div class="product-preview">
+          <div class="product-preview-title">
+            Get it for free!          </div>
+          <img class="product-preview-image" src="images/feature.png" alt="Apple iPhone 11 Pro" />
+        </div>
+      </div>
+      <div class="right">
+        <!-- Pick-a-box -->
+        <vue-box-picker
+            v-if="showBoxPicker"
+            :vertical-items="4"
+            lid-image="images/lid.png"
+            box-image="images/box.png"
+            box-back-image="images/box-back.png"
+            prize-image="images/feature.png"
+            @fail="onBoxPickerFail"
+            @success="onBoxPickerSuccess"
+            :horizontal-items="3"
+            :max-clicks="2"
+        ></vue-box-picker>
+
+        <!-- Verify -->
+        <div class="verifiy" v-if="showRotator">
+          <vue-text-rotator
+            @rotate="rotate"
+            @finished="onRotatorFinished"
+            :strings='[
+              "Verifying answers",
+              "Verifying answers",
+              "Verifying answers"
+            ]'
+          >
+          </vue-text-rotator>
+          <!-- Check -->
+          <div class="verify-text" v-if="rotateIndex > 1">
+            <img class="verify-icon-checked" src="images/checked.png" alt="">
+            <b>You answered 3/3 questions</b>
+          </div>
+          <div class="verify-text" v-else>
+            <img class="verify-icon-spinner" :class="{'is-visible' : rotateIndex > 0}" src="images/spinner.gif" alt="">
+            Checking if all questions are answered.          </div>
+          <!-- Check -->
+          <div class="verify-text" v-if="rotateIndex > 2">
+            <img class="verify-icon-checked" src="images/checked.png" alt="">
+            <b>There are still gifts available!</b>
+          </div>
+          <div class="verify-text" v-else>
+            <img class="verify-icon-spinner" :class="{'is-visible' : rotateIndex > 1}" src="images/spinner.gif" alt="">
+            Looking for gifts.          </div>
+          <!-- Check -->
+          <div class="verify-text" v-if="rotateIndex > 3">
+            <img class="verify-icon-checked" src="images/checked.png" alt="">
+            <b>There is only one Apple iPhone 11 Pro available!</b>
+          </div>
+          <div class="verify-text" v-else>
+            <img class="verify-icon-spinner" :class="{'is-visible' : rotateIndex > 2 }" src="images/spinner.gif" alt="">
+            Checking stock supply.          </div>
+        </div>
+
+        <!-- Survey -->
+        <vue-survey
+            v-if="showSurvey"
+            :show-steps="true"
+            @finished="onSurveyFinished"
+            :questions='[
+              {
+                title: "Are you a man or a woman?",
+                answers: [ { text: "Man" }, { text: "Woman" } ]
+              },
+              {
+                title: "How old are you?",
+                answers: [ { text: "18-29" }, { text: "30-39" }, { text: "40-49" }, { text: "50+" } ]
+              },
+              {
+                title: "How many people live at your place?",
+                answers: [ { text: "1" }, { text: "2" }, { text: "3" }, { text: "4+" } ]
+              },
+            ]'
+        ></vue-survey>
+      </div>
+    </main>
+    <!-- END OF PRELANDER CONTENT -->
+
+    <!-- Save skip parameter -->
+    <script type="text/javascript">window.skip = Number(0);</script>
+    <!-- Global Script -->
+    <script src="js/app.js" type="application/javascript"></script>
+    <!-- Lander Script -->
+    <script src="js/lander/lander.js" type="application/javascript"></script>
+  </body>
+
+</html>
